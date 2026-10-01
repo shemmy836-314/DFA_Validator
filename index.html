@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ashoka Women's Engineering College — Student Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#231416; --maroon:#7A1F2B; --maroon-dark:#2B1216; --red:#9E1B32;
+  --gold:#E08A2C; --blue:#1858B8; --bg:#FFFFFF; --card:#FFFFFF;
+  --muted:#6B6B6B; --line:#E7E2DE; --accept:#1E8A4C; --accept-bg:#E9F7EE;
+  --reject:#B3261E; --reject-bg:#FBEAEA;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#1B1214; --card:#241417; --ink:#F3E9E7; --muted:#C9AFB2; --line:#3A2226; --accept-bg:#16301F; --reject-bg:#33191A; }
+}
+:root[data-theme="dark"]{ --bg:#1B1214; --card:#241417; --ink:#F3E9E7; --muted:#C9AFB2; --line:#3A2226; --accept-bg:#16301F; --reject-bg:#33191A; }
+html{scroll-padding-top:6rem; scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,sans-serif;}
+a{color:inherit;}
+
+.promo{background:var(--maroon-dark); color:#F6E9DD; display:flex; align-items:center; justify-content:center; gap:.8rem; padding:.5rem 1rem; font-size:.82rem; flex-wrap:wrap; text-align:center;}
+.promo b{font-weight:600;}
+.promo .open{background:var(--blue); color:#fff; border:none; padding:.3rem .8rem; border-radius:5px; font-weight:700; font-size:.72rem; letter-spacing:.02em; cursor:pointer;}
+
+.subbar{background:var(--bg); border-bottom:1px solid var(--line); padding:.4rem 1.2rem; display:flex; justify-content:flex-end; gap:1.6rem; flex-wrap:wrap; font-size:.72rem;}
+.subbar a{color:var(--blue); text-decoration:underline; font-weight:600;}
+
+header{position:sticky; top:0; z-index:20; background:var(--bg);}
+.nav-wrap{max-width:1300px; margin:0 auto; padding:.7rem 1.2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; border-bottom:1px solid var(--line);}
+.brand{display:flex; align-items:center; gap:.5rem;}
+.brand svg{width:38px; height:38px; flex-shrink:0;}
+.logo-badge{width:40px; height:40px; flex-shrink:0; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 0 0 1.5px rgba(255,255,255,.5);}
+.logo-badge img{width:100%; height:100%; object-fit:cover;}
+.brand-text{font-family:'Poppins',sans-serif; font-weight:800; font-size:1.15rem; line-height:1.1; letter-spacing:.02em;}
+.brand-text span{display:block; font-family:'Inter',sans-serif; font-weight:600; font-size:.56rem; letter-spacing:.06em; color:var(--muted); margin-top:.15rem;}
+.brand-text i{display:block; font-style:normal; font-weight:400; font-size:.5rem; letter-spacing:.1em; color:var(--muted);}
+
+nav{display:flex; align-items:center; gap:1.1rem; flex-wrap:wrap; font-size:.85rem; font-weight:600;}
+nav a.item{display:flex; align-items:center; gap:.2rem; text-decoration:none; padding:.3rem 0;}
+nav a.item:hover{color:var(--maroon);}
+nav .caret{font-size:.6rem; color:var(--muted); margin-top:1px;}
+nav .icon-btn{background:none; border:none; cursor:pointer; color:var(--ink); display:flex; padding:.3rem;}
+nav .icon-btn svg{width:19px; height:19px;}
+.contact-btn{background:var(--red); color:#fff !important; padding:.5rem 1.2rem; border-radius:22px; font-weight:700; font-size:.8rem; text-decoration:none;}
+.search-wrap{position:relative;}
+#searchBox{display:none; align-items:center; gap:.4rem; border:1.5px solid var(--line); border-radius:8px; padding:.25rem .6rem;}
+#searchBox.open{display:flex;}
+#searchBox input{border:none; outline:none; font-size:.8rem; font-family:Inter,sans-serif; width:170px; background:transparent; color:var(--ink);}
+#searchResults{position:absolute; top:calc(100% + 6px); right:0; width:260px; background:var(--card); border:1px solid var(--line); border-radius:10px; box-shadow:0 12px 28px -12px rgba(0,0,0,.25); display:none; z-index:30; overflow:hidden;}
+#searchResults.open{display:block;}
+#searchResults button{display:block; width:100%; text-align:left; padding:.6rem .8rem; background:none; border:none; border-bottom:1px solid var(--line); cursor:pointer; font-size:.82rem; color:var(--ink); font-family:Inter,sans-serif;}
+#searchResults button:last-child{border-bottom:none;}
+#searchResults button:hover{background:var(--bg);}
+#searchResults button b{display:block; font-size:.82rem;}
+#searchResults button span{display:block; font-size:.72rem; color:var(--muted); margin-top:.1rem;}
+#searchResults .none{padding:.7rem .8rem; font-size:.8rem; color:var(--muted);}
+
+.hero{position:relative; overflow:hidden; background:radial-gradient(ellipse at 78% 45%, #4a1a12 0%, #2a1210 32%, #150a0c 60%, #0c0708 100%); color:#fff; padding:3.4rem 1.2rem 3.8rem;}
+.hero::before{content:"";position:absolute; right:-8%; top:10%; width:420px; height:420px; border-radius:50%; border:1.5px solid rgba(224,138,44,.35);}
+.hero::after{content:"";position:absolute; right:2%; top:15%; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle, rgba(255,140,60,.55), rgba(255,80,20,.08) 60%, transparent 75%); filter:blur(6px);}
+.hero-inner{max-width:1300px; margin:0 auto; position:relative; z-index:1;}
+.eyebrow{color:var(--gold); font-weight:700; font-size:.78rem; letter-spacing:.14em; margin:0 0 .6rem;}
+.hero h1{font-family:'Poppins',sans-serif; font-weight:700; font-size:clamp(1.8rem,4.4vw,2.9rem); margin:0 0 .5rem; max-width:16ch; line-height:1.12;}
+.hero p{color:#E7CFC0; font-size:.95rem; max-width:38ch; margin:0;}
+
+main{max-width:1300px; margin:0 auto; padding:2.6rem 1.2rem 3rem;}
+.login-wrap{max-width:640px; margin:0 auto;}
+.eyebrow-dark{color:var(--gold); font-weight:700; font-size:.75rem; letter-spacing:.14em; margin:0 0 .4rem;}
+.login-wrap h2{font-family:'Poppins',sans-serif; font-size:1.5rem; font-weight:700; margin:0 0 .3rem; color:#000000;}
+.login-wrap>p{color:#000000; font-size:.88rem; margin:0 0 1.4rem;}
+
+.card{background:#FFFFFF; color:#000000; border:1px solid var(--line); border-radius:12px; padding:1.6rem; box-shadow:0 10px 30px -16px rgba(0,0,0,.2);}
+form label{display:block; font-size:.8rem; font-weight:700; margin:0 0 .35rem;}
+form .field{margin-bottom:1.1rem;}
+input[type=email],input[type=password]{width:100%; padding:.7rem .85rem; border-radius:8px; border:1.5px solid var(--line); background:transparent; color:var(--ink); font-size:.92rem; font-family:Inter,sans-serif;}
+input:focus{outline:2px solid var(--gold); outline-offset:1px;}
+input.good{border-color:var(--accept);}
+input.bad{border-color:var(--reject);}
+.hint{font-size:.72rem; color:var(--muted); margin-top:.3rem;}
+button.validate{width:100%; padding:.8rem; border:none; border-radius:8px; background:var(--maroon); color:#fff; font-weight:700; font-size:.92rem; letter-spacing:.03em; cursor:pointer; margin-top:.2rem;}
+button.validate:hover{background:var(--maroon-dark);}
+
+.result{margin-top:1.3rem; display:none;}
+.result.show{display:block;}
+.result h3{font-family:'Poppins',sans-serif; font-size:1.05rem; margin:0 0 .9rem;}
+.check-row{display:flex; align-items:flex-start; gap:.55rem; padding:.7rem .9rem; border-radius:8px; margin-bottom:.5rem;}
+.check-row.ok{background:var(--accept-bg); color:var(--accept);}
+.check-row.no{background:var(--reject-bg); color:var(--reject);}
+.check-row .mark{font-size:1.05rem; line-height:1.3;}
+.check-row .txt b{display:block; font-size:.88rem;}
+.check-row .txt span{display:block; font-size:.76rem; font-weight:500; color:var(--ink); opacity:.8; margin-top:.1rem;}
+.path-block{font-size:.76rem; margin:.2rem 0 1rem .3rem; word-break:break-word; line-height:1.7;}
+.path-block b{display:block; font-size:.72rem; text-transform:none; color:#6B6B6B; margin-bottom:.15rem; font-weight:700;}
+.path-block code{font-family:'Inter',monospace; color:#1A1A1A; background:#F3F1EE; padding:.5rem .6rem; border-radius:6px; display:inline-block;}
+
+.info-grid{margin-top:3.4rem; padding-top:2.2rem; border-top:1px solid var(--line); display:grid; grid-template-columns:1fr; gap:1.6rem;}
+@media(min-width:700px){.info-grid{grid-template-columns:1fr 1fr;}}
+section.info{scroll-margin-top:8rem;}
+section.info h2{font-family:'Poppins',sans-serif; font-size:1.05rem; margin:0 0 .35rem;}
+section.info p{color:var(--muted); font-size:.85rem; max-width:60ch; margin:0;}
+
+.page{display:none;}
+.page.active{display:block;}
+.back-link{display:inline-flex; align-items:center; gap:.35rem; color:var(--maroon); font-weight:700; font-size:.85rem; text-decoration:none; margin:1.3rem 0 .4rem;}
+.back-link:hover{text-decoration:underline;}
+.detail-body{max-width:900px; margin:0 auto; padding:0 1.2rem 3.4rem;}
+.detail-body h3{font-family:'Poppins',sans-serif; font-size:1.05rem; margin:1.3rem 0 .4rem;}
+.detail-body p{color:var(--ink); font-size:.9rem; line-height:1.75; margin:0 0 .8rem; max-width:72ch;}
+.detail-body ul{margin:0 0 1rem; padding-left:1.15rem; color:var(--muted); font-size:.87rem; line-height:1.85; max-width:70ch;}
+
+.speak-btn{display:inline-flex; align-items:center; gap:.4rem; background:none; border:1.5px solid var(--maroon); color:var(--maroon); padding:.4rem .8rem; border-radius:20px; font-size:.75rem; font-weight:700; cursor:pointer; margin-top:.6rem;}
+.speak-btn:hover{background:var(--maroon); color:#fff;}
+.speak-btn:disabled{opacity:.4; cursor:default;}
+</style>
+</head>
+<body>
+
+<div class="promo"><span>Admissions for 2026-2027 batch</span><button class="open">OPEN NOW!</button></div>
+<div class="subbar"><a href="#">Admission Process</a><a href="#">Fee Structure &amp; Scholarships</a><a href="#">Application Form</a></div>
+
+<header>
+  <div class="nav-wrap">
+    <div class="brand">
+<span class="logo-badge"><img src="data:image/jpeg;base64,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" alt="Ashoka Women's Engineering College logo"></span>
+      <div class="brand-text">ASHOKA<span>WOMEN'S ENGINEERING COLLEGE</span><i>(AUTONOMOUS)</i></div>
+    </div>
+    <nav>
+      <a class="item" href="javascript:void(0)" onclick="showPage('home')">Home</a>
+      <a class="item" href="javascript:void(0)" onclick="showPage('about')">About</a>
+      <a class="item" href="javascript:void(0)" onclick="showPage('program')">Programs <span class="caret">▾</span></a>
+      <a class="item" href="javascript:void(0)" onclick="showPage('department')">Departments <span class="caret">▾</span></a>
+      <a class="item" href="javascript:void(0)" onclick="showPage('placement')">Placements <span class="caret">▾</span></a>
+      <a class="item" href="javascript:void(0)" onclick="showPage('campus')">Campus Life <span class="caret">▾</span></a>
+      <a class="item" href="javascript:void(0)" onclick="showPage('student')">Student Corner <span class="caret">▾</span></a>
+      <button class="icon-btn" id="searchToggle" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></button>
+      <span class="search-wrap">
+        <span id="searchBox"><input type="text" id="searchInput" placeholder="Search the site…" autocomplete="off"></span>
+        <div id="searchResults"></div>
+      </span>
+      <a class="contact-btn" href="javascript:void(0)" onclick="showPage('contact')">Contact Us</a>
+    </nav>
+  </div>
+</header>
+
+<div id="page-home" class="page active">
+
+<div class="hero" id="top">
+  <div class="hero-inner">
+    <p class="eyebrow">STUDENT PORTAL</p>
+    <h1>Email &amp; Password Validator</h1>
+    <p>Automata Theory &amp; Compiler Design — every login is checked letter by letter by a real deterministic finite automaton.</p>
+  </div>
+</div>
+
+<main>
+  <div class="login-wrap">
+    <p class="eyebrow-dark">STUDENT LOGIN</p>
+    <h2>Student Login &amp; Validation</h2>
+    <p>Only addresses ending in <strong>@ashokacollege.in</strong> are accepted. Type below and press Validate to see the exact DFA state path.</p>
+
+    <div class="card">
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="firstname.lastname@ashokacollege.in" autocomplete="username">
+          <div class="hint" id="emailHint"></div>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+          <div class="hint" id="pwdHint"></div>
+        </div>
+        <button type="submit" class="validate">VALIDATE</button>
+        <button type="button" class="speak-btn" id="replayBtn" disabled>🔊 Replay voice-over</button>
+      </form>
+
+      <div class="result" id="result">
+        <h3>Validation Result</h3>
+        <div class="check-row" id="emailRow"><span class="mark" id="emailMark"></span><div class="txt"><b id="emailTitle"></b><span id="emailDesc"></span></div></div>
+        <div class="path-block"><b>Email DFA Path:</b><code id="emailPath"></code></div>
+        <div class="check-row" id="pwdRow"><span class="mark" id="pwdMark"></span><div class="txt"><b id="pwdTitle"></b><span id="pwdDesc"></span></div></div>
+        <div class="path-block"><b>Password DFA Path:</b><code id="pwdPath"></code></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+</div>
+
+<div id="page-detail" class="page">
+  <div class="hero" style="padding:2.2rem 1.2rem 2.4rem;">
+    <div class="hero-inner">
+      <p class="eyebrow" id="detailEyebrow"></p>
+      <h1 id="detailTitle" style="font-size:clamp(1.5rem,3.6vw,2.2rem);"></h1>
+      <p id="detailSub"></p>
+    </div>
+  </div>
+  <div class="detail-body">
+    <a href="javascript:void(0)" class="back-link" onclick="showPage('home')">&larr; Back to Home</a>
+    <div id="detailBody"></div>
+  </div>
+</div>
+
+<script>
+const DETAIL_PAGES = {
+  about:{eyebrow:"ABOUT US", title:"About Ashoka Women's Engineering College", sub:"A NAAC A+ accredited, autonomous institute for women in Kurnool, Andhra Pradesh.",
+    body:`<p>Ashoka Women's Engineering College (Autonomous) is a private engineering institute located in Kurnool, Andhra Pradesh, dedicated exclusively to higher technical and management education for women.</p>
+    <p>Established in 2008 — originally known as Dr. K. V. Subba Reddy College of Engineering for Women, and renamed in 2020 — the college achieved autonomous status in 2023. It is accredited with a <b>NAAC A+ grade</b>, approved by the <b>AICTE</b>, and affiliated with <b>JNTU Anantapur (JNTUA)</b>.</p>
+    <h3>Key facts</h3>
+    <ul><li>Founded 2008, renamed Ashoka Women's Engineering College in 2020</li><li>Autonomous status since 2023</li><li>NAAC A+ accredited, AICTE approved</li><li>Affiliated with JNTU Anantapur (JNTUA)</li></ul>`},
+  program:{eyebrow:"PROGRAMS", title:"Academics & Fee Structure (2026)", sub:"Undergraduate and postgraduate programs, admitted through state-level entrance exams.",
+    body:`<p>The institute primarily admits students through state-level entrance exams — <b>AP EAPCET</b> for engineering, and <b>AP ICET</b> for postgraduate applications.</p>
+    <h3>B.Tech (Undergraduate)</h3>
+    <p>Annual fee is approximately <b>₹52,500</b> (totaling around <b>₹2,10,000</b> across the 4-year duration), uniform across branches — CSE, CSE-AI, ECE, EEE and Civil.</p>
+    <h3>MBA / MCA (Postgraduate)</h3>
+    <p>Highly affordable programs priced at a total tuition fee of <b>₹70,000</b> for the full 2-year duration.</p>`},
+  department:{eyebrow:"DEPARTMENTS", title:"Our Departments", sub:"Engineering, management and science departments under one campus.",
+    body:`<h3>Engineering Departments</h3>
+    <ul><li>Computer Science and Engineering (CSE)</li><li>Computer Science and Engineering – Artificial Intelligence (CSE-AI)</li><li>Electronics and Communication Engineering (ECE)</li><li>Electrical and Electronics Engineering (EEE)</li><li>Civil Engineering</li></ul>
+    <h3>Postgraduate &amp; Other Departments</h3>
+    <ul><li>Master of Business Administration (MBA)</li><li>Master of Computer Applications (MCA)</li><li>Humanities &amp; Science</li></ul>`},
+  placement:{eyebrow:"PLACEMENTS", title:"Training & Placements", sub:"A strong, award-winning track record for corporate placements.",
+    body:`<p>Ashoka maintains a strong track record for corporate placements, having received the national <b>Atal Award for Placements</b>.</p>
+    <h3>Placement metrics</h3>
+    <ul><li>Over <b>1,290+ placements</b> recorded across recent batches</li><li>Average package around <b>₹3.60 LPA</b></li><li>Highest domestic package reached <b>₹16.43 LPA</b></li></ul>
+    <h3>Training program</h3>
+    <p>Structured soft-skills coaching, aptitude tracking, and dedicated corporate training coordinators make students industry-ready well before final placements.</p>`},
+  campus:{eyebrow:"CAMPUS LIFE", title:"Campus Infrastructure & Facilities", sub:"A sprawling 10.6-acre residential campus with women-centric infrastructure.",
+    body:`<p>The college operates a sprawling <b>10.6-acre residential campus</b> featuring modern, women-centric infrastructure.</p>
+    <h3>Academic labs</h3>
+    <ul><li>High-tech digital classrooms</li><li>Dynamic engineering work-labs</li><li>Specialized AICTE-standard computing facilities</li></ul>
+    <h3>Accommodation</h3>
+    <p>Secure, fully protected on-campus women's housing (<b>HR Women's Hostel</b>) featuring spacious dining halls, 24/7 CCTV surveillance, and medical emergency assistance.</p>
+    <h3>Amenities</h3>
+    <ul><li>Fully equipped fitness gym</li><li>Central digital library</li><li>High-speed Wi-Fi and transport fleets</li><li>Modern athletic facilities — volleyball courts and swimming pools</li></ul>`},
+  student:{eyebrow:"STUDENT CORNER", title:"Student Corner", sub:"Timetables, results, circulars and fee status in one place.",
+    body:`<p>Once signed in through the Student Portal, this section gives quick access to everything a student needs day-to-day.</p>
+    <h3>Available resources</h3>
+    <ul><li>Class timetables and exam schedules</li><li>Semester results and fee payment status</li><li>Official circulars and notices</li></ul>`},
+  contact:{eyebrow:"CONTACT US", title:"Get in Touch", sub:"We're happy to help with admissions or general queries.",
+    body:`<p>Reach out to Ashoka Women's Engineering College (Autonomous) using the details below, or visit the Admission Process page for step-by-step guidance.</p>
+    <h3>Contact Information</h3>
+    <ul><li>Phone: +91 76800 76600 / +91 76800 76601</li><li>General Email: admissions@ashokacollege.in</li><li>Principal Email: principal@ashokacollege.in</li><li>Placements Email: placements@ashokacollege.in</li><li>Official Website: ashokacollege.in</li></ul>
+    <h3>Address</h3>
+    <p>Opp. Dupadu Railway Station, NH-44, Lakshmipuram (Post), Kurnool - 518218, Andhra Pradesh, India</p>`}
+};
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  if(id === "home"){
+    document.getElementById("page-home").classList.add("active");
+  } else {
+    const d = DETAIL_PAGES[id];
+    document.getElementById("detailEyebrow").textContent = d.eyebrow;
+    document.getElementById("detailTitle").textContent = d.title;
+    document.getElementById("detailSub").textContent = d.sub;
+    document.getElementById("detailBody").innerHTML = d.body;
+    document.getElementById("page-detail").classList.add("active");
+  }
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+const DOMAIN = "ashokacollege.in";
+const LOCAL_RE = /[A-Za-z0-9._-]/;
+
+function simulateEmail(str){
+  let state = 0; const path = [0]; let reason = "";
+  for(const ch of str){
+    if(state === 0){
+      if(LOCAL_RE.test(ch)) state = 1;
+      else { state = 19; if(!reason) reason = `the character "${ch}" cannot start an email address`; }
+    } else if(state === 1){
+      if(ch === "@") state = 2;
+      else if(!LOCAL_RE.test(ch)){ state = 19; if(!reason) reason = `the character "${ch}" is not allowed before the at symbol`; }
+    } else if(state >= 2 && state <= 18){
+      const idx = state - 2;
+      if(idx === DOMAIN.length){ state = 19; if(!reason) reason = `there are extra characters after "ashokacollege dot in"`; }
+      else if(ch.toLowerCase() === DOMAIN[idx]) state = state+1;
+      else { state = 19; if(!reason) reason = `expected the letter "${DOMAIN[idx]}" but found "${ch}" while matching the domain "ashokacollege dot in"`; }
+    }
+    path.push(state);
+  }
+  if(state !== 19 && state !== 18){
+    if(str.length === 0) reason = "no email address was entered";
+    else if(state === 0) reason = "the address is empty";
+    else if(state === 1) reason = "there is no at symbol yet";
+    else reason = `only ${state-2} of 16 domain characters have been matched so far`;
+  }
+  return {accepted: state === 18, path, reason};
+}
+
+function simulateEmailStr(str){
+  const {accepted, path, reason} = simulateEmail(str);
+  return {accepted, reason, text: path.map(s=>"q"+s).join(" → ")};
+}
+
+function simulatePassword(str){
+  let satisfied = new Set(); const path = [0];
+  for(const ch of str){
+    if(/[a-z]/.test(ch)) satisfied.add("lower");
+    else if(/[A-Z]/.test(ch)) satisfied.add("upper");
+    else if(/[0-9]/.test(ch)) satisfied.add("digit");
+    else satisfied.add("special");
+    let state = satisfied.size;
+    if(state === 4){ state = str.length>=8 ? 5 : 4; }
+    path.push(state);
+  }
+  const strong = satisfied.size === 4 && str.length >= 8;
+  let reason = "";
+  if(str.length === 0) reason = "no password was entered";
+  else if(!strong){
+    const missing = [];
+    if(!satisfied.has("lower")) missing.push("a lowercase letter");
+    if(!satisfied.has("upper")) missing.push("an uppercase letter");
+    if(!satisfied.has("digit")) missing.push("a digit");
+    if(!satisfied.has("special")) missing.push("a special character");
+    if(str.length < 8) missing.push("at least 8 characters total");
+    reason = "add " + missing.join(", ");
+  }
+  return {accepted: strong, text: path.map(s=>"q"+s).join(" → "), satisfied, reason};
+}
+
+let lastSpeech = "";
+function pickFemaleVoice(){
+  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  return voices.find(v=>/female|zira|samantha|victoria|moira|tessa|susan|karen|google us english/i.test(v.name))
+      || voices.find(v=>v.lang && v.lang.startsWith("en"))
+      || voices[0];
+}
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  lastSpeech = text;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const v = pickFemaleVoice();
+  if(v) u.voice = v;
+  u.pitch = 1.05; u.rate = 0.97;
+  window.speechSynthesis.speak(u);
+  const btn = document.getElementById("replayBtn");
+  if(btn) btn.disabled = false;
+}
+
+const emailEl = document.getElementById("email");
+const pwdEl = document.getElementById("password");
+
+document.getElementById("loginForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const email = emailEl.value, pwd = pwdEl.value;
+  const em = simulateEmailStr(email);
+  const pw = simulatePassword(pwd);
+
+  emailEl.className = em.accepted ? "good" : "bad";
+  pwdEl.className = pw.accepted ? "good" : "bad";
+
+  const emailRow = document.getElementById("emailRow");
+  emailRow.className = "check-row " + (em.accepted ? "ok":"no");
+  document.getElementById("emailMark").textContent = em.accepted ? "✅" : "❌";
+  document.getElementById("emailTitle").textContent = em.accepted ? "Email is VALID" : "Email is INVALID";
+  document.getElementById("emailDesc").textContent = em.accepted ? "Valid Ashoka College email address, reached accept state q18." : "Rejected — " + em.reason + ".";
+  document.getElementById("emailPath").textContent = em.text;
+
+  const pwdRow = document.getElementById("pwdRow");
+  pwdRow.className = "check-row " + (pw.accepted ? "ok":"no");
+  document.getElementById("pwdMark").textContent = pw.accepted ? "✅" : "❌";
+  document.getElementById("pwdTitle").textContent = pw.accepted ? "Strong Password" : "Weak Password";
+  document.getElementById("pwdDesc").textContent = pw.accepted ? "Strong password, reached accept state q5." : "Rejected — " + pw.reason + ".";
+  document.getElementById("pwdPath").textContent = pw.text;
+
+  document.getElementById("result").classList.add("show");
+
+  const emailLine = em.accepted
+    ? "Your email is accepted. It reached the accept state, q eighteen, matching ashokacollege dot in."
+    : "Your email is rejected. " + em.reason + ".";
+  const pwdLine = pw.accepted
+    ? "Your password is strong and reached the accept state, q five."
+    : "Your password is weak. Please " + pw.reason + ".";
+  speak(emailLine + " " + pwdLine);
+});
+
+document.getElementById("replayBtn").addEventListener("click", ()=>{
+  if(lastSpeech) speak(lastSpeech);
+});
+if("speechSynthesis" in window){
+  window.speechSynthesis.onvoiceschanged = function(){};
+}
+
+const SEARCH_INDEX = [
+  {id:"home", title:"Home — Student Login & Validation", keywords:"home login student portal email password validator dfa automata sign in"},
+  {id:"about", title:"About Ashoka Women's Engineering College", keywords:"about history naac aicte jntua 2008 2020 2023 autonomous kurnool andhra pradesh"},
+  {id:"program", title:"Programs — Academics & Fee Structure", keywords:"programs academics fees btech mba mca eapcet icet admission cse ece eee civil tuition"},
+  {id:"department", title:"Departments", keywords:"departments cse cse-ai ai ece eee civil mba mca humanities science engineering"},
+  {id:"placement", title:"Training & Placements", keywords:"placements training salary package lpa atal award corporate jobs careers"},
+  {id:"campus", title:"Campus Life & Infrastructure", keywords:"campus life hostel gym library wifi sports volleyball swimming pool facilities acre"},
+  {id:"student", title:"Student Corner", keywords:"student corner timetable results fees circulars notices"},
+  {id:"contact", title:"Contact Us", keywords:"contact email phone address admissions"}
+];
+
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+const searchBox = document.getElementById("searchBox");
+
+function runSearch(query){
+  const q = query.trim().toLowerCase();
+  searchResults.innerHTML = "";
+  if(q.length === 0){ searchResults.classList.remove("open"); return; }
+  const matches = SEARCH_INDEX.filter(item =>
+    item.title.toLowerCase().includes(q) || item.keywords.includes(q)
+  ).slice(0, 6);
+  if(matches.length === 0){
+    searchResults.innerHTML = '<div class="none">No matching section found.</div>';
+  } else {
+    matches.forEach(m=>{
+      const btn = document.createElement("button");
+      btn.innerHTML = `<b>${m.title}</b><span>Go to this section</span>`;
+      btn.addEventListener("click", ()=>{
+        showPage(m.id);
+        searchInput.value = "";
+        searchResults.classList.remove("open");
+        searchBox.classList.remove("open");
+      });
+      searchResults.appendChild(btn);
+    });
+  }
+  searchResults.classList.add("open");
+}
+
+searchInput.addEventListener("input", e=> runSearch(e.target.value));
+searchInput.addEventListener("keydown", e=>{
+  if(e.key === "Enter"){
+    e.preventDefault();
+    const first = searchResults.querySelector("button");
+    if(first) first.click();
+  } else if(e.key === "Escape"){
+    searchResults.classList.remove("open");
+  }
+});
+document.addEventListener("click", e=>{
+  if(!e.target.closest(".search-wrap")) searchResults.classList.remove("open");
+});
+
+document.getElementById("searchToggle").addEventListener("click", ()=>{
+  searchBox.classList.toggle("open");
+  if(searchBox.classList.contains("open")) searchInput.focus();
+  else searchResults.classList.remove("open");
+});
+</script>
+</body>
+</html>
